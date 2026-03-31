@@ -1,12 +1,10 @@
-console.log("🔥 FILE RUNNING");
-
-const express = require("express");
+const express = require('express');
 const app = express();
 
-app.get("/", (req, res) => {
-  res.send("Hello World 🚀");
+app.get('/', (req, res) => {
+  res.send('Hello CI/CD Pipeline');  // <-- changed this line
 });
 
-app.listen(3000, () => {
-  console.log("✅ Server running on http://localhost:3000");
+app.listen(3000, '0.0.0.0', () => {
+  console.log('Server running on port 3000');
 });
