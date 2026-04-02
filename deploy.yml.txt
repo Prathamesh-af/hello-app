@@ -1,47 +1,22 @@
-name: Deploy Node App to EC2
+name: Deploy to EC2
 
 on:
   push:
     branches:
-      - main   # Trigger on push to main branch
+      - main
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: Amazon Linux-latest
 
     steps:
-      - name: 📥 Checkout Code
-        uses: actions/checkout@v3
-
-      - name: 🚀 Deploy to EC2 via SSH
-        uses: appleboy/ssh-action@v0.1.9
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v0.1.6
         with:
-          host: ${{ secrets.HOST_DNS }}
-          username: ${{ secrets.USERNAME }}
+          host: 34.226.234.43
+          username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
-          port: 22
           script: |
-            echo "Connected to EC2"
-
-            # Go to home directory
-            cd /home/ec2-user
-
-            # Clone repo if not exists
-            if [ ! -d "myapp" ]; then
-              git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git myapp
-            fi
-
-            # Go inside project
-            cd myapp
-
-            # Pull latest code
+            cd ~/hello-app
             git pull origin main
-
-            # Install dependencies
-            npm install
-
-            # Restart or start app using pm2
-            pm2 restart myserver || pm2 start app.js --name myserver
-
-            # Save pm2 process
-            pm2 save
+            pm2 restart hello-app || pm2 start app.js --name hello-app
